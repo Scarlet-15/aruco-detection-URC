@@ -11,20 +11,24 @@ def distance_to_cam(tVec):
 
 #To get distance between 2 aruco markers
 
-def distance_bet_markers(tVec,no_of_marker):
+def distance_bet_markers(tVec,no_of_marker,marker_IDs):
     no_of_marker=len(tVec)
     for i in range(no_of_marker):
-        for j in range(no_of_marker):
-            dist_in_inches=np.linalg.norm(tVec[i]-tVec[j])      #using Euclidean distance formula
-            dist_in_meter=dist_in_inches*0.0254
+        for j in range(i+1,no_of_marker):
+            dist_in_inches=np.linalg.norm(tVec[i]-tVec[j])      #using Euclidean distance formula           
+            dist_in_meter=(dist_in_inches*0.0254)               
             print(dist_in_meter)
+            if(1.9<dist_in_meter<2.1):
+                print(marker_IDs[i],'and',marker_IDs[j],'is a gate')
+            else:
+                print(marker_IDs[i],'and',marker_IDs[j],'is a post')
 
 
 #Getting the camera calibration details that we stored
-calib_data_path="../calib_data/MultiMatrix.npz"
+calib_data_path="Navigation/calib_data/MultiMatrix.npz"
 calib_data=np.load(calib_data_path)
 print(calib_data.files)
-with open('../calib_data/MultiMatrix.npz','rb') as f:
+with open('Navigation/calib_data/MultiMatrix.npz','rb') as f:
     camera_matrix=np.load(f)
     camera_distortion=np.load(f)
 cam_mat=calib_data["camMatrix"]
@@ -45,9 +49,9 @@ while True:
     print(marker_IDs)
     if marker_corners:
         rVec,tVec,_=aruco.estimatePoseSingleMarkers(marker_corners,MARKER_SIZE,cam_mat,dist_coef)
-        print(distance_to_cam(tVec))
+        #print(distance_to_cam(tVec))
         if(len(tVec)>1):
-           distance_bet_markers(tVec,len(marker_IDs))
+           distance_bet_markers(tVec,len(marker_IDs),marker_IDs)
         
         
         
@@ -63,3 +67,4 @@ while True:
         break
 cap.release()
 cv2.destroyAllWindows()
+
