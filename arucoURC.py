@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jan 14 15:17:08 2023
-
 @author: Gomu
+
 """
 
 #Import Required Packages
