@@ -2,6 +2,13 @@ import cv2
 from cv2 import aruco
 import numpy as np
 
+#To get 3-D co-ordinates of the marker with respect to camera
+
+def point_3d(tVec):
+    for point in tVec:
+        print(point)
+
+
 #To get distance of marker from camera
 
 def distance_to_cam(tVec):
@@ -49,6 +56,7 @@ while True:
     print(marker_IDs)
     if marker_corners:
         rVec,tVec,_=aruco.estimatePoseSingleMarkers(marker_corners,MARKER_SIZE,cam_mat,dist_coef)
+        point_3d(tVec)
         #print(distance_to_cam(tVec))
         if(len(tVec)>1):
            distance_bet_markers(tVec,len(marker_IDs),marker_IDs)
@@ -67,4 +75,3 @@ while True:
         break
 cap.release()
 cv2.destroyAllWindows()
-
